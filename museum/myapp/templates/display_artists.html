@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<body>
+	<body>
+		<img src="{% static 'images/artifacts.png' %}" alt="Artifacts"> 
+		<h1>Artists and their Works</h1><br>
+		{% for table, artist in zipped %}
+		
+			<h2>{{artist}}</h2>
+		
+			<table>
+				<tr>
+					{% for i in columns %}
+						<th>{{i}}</th>
+					{% endfor %}
+				</tr>
+		
+				{% for i in table %}
+					<tr>
+						{% for j in i %}
+							<td>{{j}}</td>
+		
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</table>
+		
+		{% endfor %}
+</body>
+</html>
+{% endblock %}

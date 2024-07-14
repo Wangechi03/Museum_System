@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        body {
+            background-image: url("{% static "visitor.jpg" %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: black;
+        }
+
+        h1 {
+            color: black;
+            opacity: 0.6;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            background-color: lightblue;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        form {
+            text-align: left;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1e90ff; /* Darker shade of blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Create An Account</h1>
+
+    <div class="container">
+        <form action="/edit_profile/" method="POST">
+            {% csrf_token %}
+
+            <label class="label">First Name</label>
+            <input type="text" name="fname" value="{{ fname }}" required readonly>
+            <br><br>
+
+            <label class="label">Last Name</label>
+            <input type="text" name="lname" value="{{ lname }}" required readonly>
+            <br><br>
+
+            <label class="label">Nationality</label>
+            <input type="text" name="nationality" value="{{ nationality }}" required>
+            <br><br>
+
+            <label class="label">Address</label>
+            <input type="text" name="address" value="{{ address }}" required>
+            <br><br>
+
+            <label class="label">Email</label>
+            <input type="text" name="email" value="{{ email }}" required>
+            <br><br>
+
+            <label class="label">Contact</label>
+            <input type="number" name="phone" value="{{ phone }}" required>
+            <br><br>
+
+            <input name="submit" type="submit" value="Update Profile">
+        </form>
+    </div>
+
+    <br><br>
+    {{ error }}
+</body>
+</html>
+{% endblock %}

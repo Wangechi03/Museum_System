@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #f2f2f2;
+    }
+    .container {
+        background-color: #ffffff;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="container">
+    <h1>Register Department</h1>
+
+    {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="department_name">Department Name</label>
+            <input type="text" class="form-control" id="department_name" name="department_name" required>
+        </div>
+        <div class="form-group">
+            <label for="incharge">Incharge</label>
+            <input type="text" class="form-control" id="incharge" name="incharge" required>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="opening_time">Opening Time</label>
+                <input type="time" class="form-control" id="opening_time" name="opening_time" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="closing_time">Closing Time</label>
+                <input type="time" class="form-control" id="closing_time" name="closing_time" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}

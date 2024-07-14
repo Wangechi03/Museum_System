@@ -1,0 +1,15 @@
+<!-- Example your_template.html -->
+ {% extends "base.html" %}
+ {% block content %}
+<h1>Booking Details</h1>
+<p>Name: {{ booking.name }}</p>
+<p>Email: {{ booking.email }}</p>
+<p>Amount Paid: {{ booking.amount }}</p>
+<p>Phone Number: {{ booking.phone }}</p>
+<p>Ticket Type: {{ booking.ticket_type }}</p>
+<p>Quantity: {{ booking.quantity }}</p>
+<p>Visit Date: {{ booking.date }}</p>
+<p>Booking Date: {{ booking.booking_date }}</p>
+<!-- Add more fields as needed -->
+ {% endblock %}
+

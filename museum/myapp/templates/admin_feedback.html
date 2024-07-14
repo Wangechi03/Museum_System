@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Feedback Messages</h1>
+    <div class="card">
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                {% if feedback_messages %}
+                    {% for message in feedback_messages %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">
+                                    <a href="{% url 'admin_feedback' message.id %}">
+                                        From: {{ message.sender_name }} ({{ message.sender_email }})
+                                    </a>
+                                </h5>
+                                <p class="mb-1">Sent at: {{ message.sent_at }}</p>
+                                <p class="mb-1">Subject: {{ message.subject }}</p>
+                                <p>{{ message.message }}</p>
+                            </div>
+                            {% if not message.is_read %}
+                            <span class="badge badge-warning">New</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">No feedback messages yet.</li>
+                    {% endfor %}
+                {% else %}
+                <li class="list-group-item">No feedback messages yet.</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

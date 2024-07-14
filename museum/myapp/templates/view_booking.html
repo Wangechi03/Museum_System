@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        background-color: #ffffff;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333333;
+    }
+
+    table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #dddddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        padding: 8px 16px;
+        color: #333333;
+    }
+
+    .pagination a:hover {
+        background-color: #f2f2f2;
+    }
+
+    .btn {
+        margin-right: 5px;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Booking Details</h1>
+    <table id="bookingtable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Visitor Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Amount Paid (KES)</th>
+                <th>Ticket Type</th>
+                <th>Quantity</th>
+                <th>Visit Date</th>
+                <th>Booking Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in page_obj %}
+            <tr>
+                <td>{{ booking.visitorname }}</td>
+                <td>{{ booking.phonenumber }}</td>
+                <td>{{ booking.email }}</td>
+                <td>{{ booking.amount }}</td>
+                <td>{{ booking.ticket_type }}</td>
+                <td>{{ booking.quantity }}</td>
+                <td>{{ booking.date }}</td>
+                <td>{{ booking.booking_date }}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="editBooking('{{ booking.id }}')">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteBooking('{{ booking.id }}')">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+    <!-- Generate PDF Button -->
+    <button id="generate-pdf" class="btn btn-success mt-3">Generate PDF</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    function editBooking(id) {
+        // Redirect to edit booking view
+        window.location.href = '/edit-booking/' + id;
+    }
+
+    function deleteBooking(id) {
+        // Confirm deletion and send AJAX request
+        if (confirm('Are you sure you want to delete this booking?')) {
+            $.ajax({
+                url: '/delete-booking/' + id,
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    // Reload page or update table after deletion
+                    alert(response.message); // Optional: Show success message
+                    location.reload(); // Example: Reload page after deletion
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors if any
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    }
+
+    // Generate PDF Functionality
+    $(document).ready(function() {
+        $('#generate-pdf').on('click', function() {
+            console.log('Button clicked');
+            // Initialize jsPDF
+            var doc = new jsPDF();
+
+            // Add header
+            doc.text('Booking Details', 14, 10);
+
+            // Generate table content
+            var table = $('#bookingtable')[0];
+            var rows = table.rows.length;
+
+            for (var i = 0; i < rows; i++) {
+                var rowData = [];
+                $(table.rows[i]).find('td, th').each(function() {
+                    rowData.push($(this).text());
+                });
+                doc.text(14, 20 + (i * 10), rowData.join(', '));
+            }
+
+            // Save PDF
+            doc.save('booking-details.pdf');
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Ticket</title>
+    <!-- Include any CSS stylesheets or meta tags needed -->
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f2f2f2;
+        }
+        
+        /* Form styling */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input, select, button {
+            width: calc(100% - 22px); /* Adjusted for padding and border */
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        h2 {
+            text-align: center;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        @media (max-width: 600px) {
+            form {
+                padding: 10px;
+            }
+            input, select, button {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Book Tickets</h2>
+    
+    <!-- Form to capture visitor and ticket information -->
+    <form method="POST" action="{% url 'stkpush' %}">
+        {% csrf_token %}
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" pattern="\d{9}" required>
+        
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="amount">Amount to Pay (KES):</label>
+        <input type="number" id="amount" name="amount" min="1" required>
+        
+        <label for="ticket_type">Ticket Type:</label>
+        <select id="ticket_type" name="ticket_type" required>
+            <option value="Adult">Adult</option>
+            <option value="Child">Child</option>
+            <!-- Add other ticket types as needed -->
+        </select>
+        
+        <label for="quantity">Number of Tickets:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required>
+        
+        <label for="date">Visit Date:</label>
+        <input type="date" id="date" name="date" min="{% now 'Y-m-d' %}" required>
+        
+        <button type="submit">Proceed to Payment</button>
+    </form>
+    
+    <!-- Display message or response from the server -->
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    
+    <!-- Include any additional HTML content or scripts as needed -->
+</body>
+</html>
